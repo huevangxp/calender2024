@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>12-Month Calendar</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background-color: #f4f6f8;
+    }
+    h1 {
+      text-align: center;
+      margin: 20px;
+      color: #333;
+    }
+    .calendar-container {
+      display: grid;
+      grid-template-columns: repeat(4, 2fr); /* 4 months per row */
+      gap: 20px;
+      padding: 20px;
+      max-width: 1400px;
+    }
+    .month {
+      background-color: #ffffff;
+      border-radius: 50px;
+      overflow: hidden;
+      padding: 15px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .month:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+    }
+    .month h2 {
+      text-align: center;
+      font-size: 1.5rem;
+      color: #444;
+      margin: 0 0 15px;
+      font-weight: bold;
+    }
+    .days {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr); /* Days of the week in 7 columns */
+      text-align: center;
+      margin-top: 10px;
+  
+    }
+    .day {
+      padding: 10px 5px;
+      margin: 3px 2px;
+      background-color: #f9f9f9;
+      border-radius: 8px;
+      transition: background-color 0.2s;
+    }
+    .day-name {
+      font-weight: bold;
+      background-color: #e0e0e0;
+      border-radius: 8px;
+    }
+    .day:hover {
+      background-color: #e8f5e9;
+    }
+  </style>
+</head>
+<body>
+
+<h1>12-Month Calendar</h1>
+
+<div class="calendar-container" id="calendar-container"></div>
+
+<script>
+  const months = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
+
+  const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+  function createCalendar() {
+    const container = document.getElementById('calendar-container');
+    const currentYear = new Date().getFullYear();
+
+    months.forEach((month, index) => {
+      const monthDiv = document.createElement('div');
+      monthDiv.className = 'month';
+      
+      const monthTitle = document.createElement('h2');
+      monthTitle.innerText = `${month} ${currentYear}`;
+      monthDiv.appendChild(monthTitle);
+
+      const daysDiv = document.createElement('div');
+      daysDiv.className = 'days';
+
+      // Create day name headers
+      daysOfWeek.forEach(day => {
+        const dayNameDiv = document.createElement('div');
+        dayNameDiv.className = 'day day-name';
+        dayNameDiv.innerText = day;
+        daysDiv.appendChild(dayNameDiv);
+      });
+
+      // Get the number of days in the month
+      const daysInMonth = new Date(currentYear, index + 1, 0).getDate();
+      const firstDay = new Date(currentYear, index, 1).getDay();
+
+      // Fill in blank days at the start
+      for (let i = 0; i < firstDay; i++) {
+        const blankDiv = document.createElement('div');
+        blankDiv.className = 'day';
+        daysDiv.appendChild(blankDiv);
+      }
+
+      // Fill in days of the month
+      for (let day = 1; day <= daysInMonth; day++) {
+        const dayDiv = document.createElement('div');
+        dayDiv.className = 'day';
+        dayDiv.innerText = day;
+        daysDiv.appendChild(dayDiv);
+      }
+
+      monthDiv.appendChild(daysDiv);
+      container.appendChild(monthDiv);
+    });
+  }
+ 
+  createCalendar();
+</script>
+
+</body>
+</html>
