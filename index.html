@@ -19,6 +19,17 @@
       margin: 20px;
       color: #333;
     }
+    .year-input {
+      margin-bottom: 20px;
+      font-size: 1.2rem;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      background-color: #fff;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      width: 200px;
+    }
     .calendar-container {
       display: grid;
       grid-template-columns: repeat(4, 2fr); /* 4 months per row */
@@ -50,7 +61,6 @@
       grid-template-columns: repeat(7, 1fr); /* Days of the week in 7 columns */
       text-align: center;
       margin-top: 10px;
-  
     }
     .day {
       padding: 10px 5px;
@@ -73,6 +83,9 @@
 
 <h1>12-Month Calendar</h1>
 
+<!-- Year Input Field -->
+<input type="number" id="year-input" class="year-input" placeholder="Enter year" min="1900" max="2100" />
+
 <div class="calendar-container" id="calendar-container"></div>
 
 <script>
@@ -83,16 +96,17 @@
 
   const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-  function createCalendar() {
+  // Create the calendar
+  function createCalendar(year) {
     const container = document.getElementById('calendar-container');
-    const currentYear = new Date().getFullYear();
+    container.innerHTML = ''; // Clear previous calendar
 
     months.forEach((month, index) => {
       const monthDiv = document.createElement('div');
       monthDiv.className = 'month';
       
       const monthTitle = document.createElement('h2');
-      monthTitle.innerText = `${month} ${currentYear}`;
+      monthTitle.innerText = `${month} ${year}`;
       monthDiv.appendChild(monthTitle);
 
       const daysDiv = document.createElement('div');
@@ -107,8 +121,8 @@
       });
 
       // Get the number of days in the month
-      const daysInMonth = new Date(currentYear, index + 1, 0).getDate();
-      const firstDay = new Date(currentYear, index, 1).getDay();
+      const daysInMonth = new Date(year, index + 1, 0).getDate();
+      const firstDay = new Date(year, index, 1).getDay();
 
       // Fill in blank days at the start
       for (let i = 0; i < firstDay; i++) {
@@ -129,8 +143,18 @@
       container.appendChild(monthDiv);
     });
   }
- 
-  createCalendar();
+
+  // Add event listener to the input field
+  const yearInput = document.getElementById('year-input');
+  yearInput.addEventListener('input', () => {
+    const selectedYear = parseInt(yearInput.value);
+    if (selectedYear >= 1900 && selectedYear <= 2100) {
+      createCalendar(selectedYear);
+    }
+  });
+
+  // Create calendar for the current year on page load
+  createCalendar(new Date().getFullYear());
 </script>
 
 </body>
